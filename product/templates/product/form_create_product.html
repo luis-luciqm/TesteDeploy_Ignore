@@ -1,0 +1,710 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"></link>
+
+{% endblock css %}
+
+{% block content %}
+<div class="main-content" >
+    <section class="section">
+        <div class="section-header">
+          <div class="section-header-back">
+            <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+          </div>
+          <h1>Criar Novo Anúncio</h1>
+          <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="#"></a>Cadastrar Anúncios</a></div>
+          </div>
+        </div>
+    </section>
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12">
+              <div class="card">
+                  <div class="card-header">
+                    <h4>Links</h4>
+                    {% if object.id %}
+                     <a style="margin: auto; color: rgb(0, 0, 0);" href="{{domain_url}}/oferta/{{object.slug}}" target="_blank"><span style="background-color: rgb(236, 234, 234); padding: 10px;">{{domain_url}}/oferta/{{object.slug}}</span></a>
+                    {% endif %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <span class="badge badge-warning">{{ message }}</span>
+                        {% endfor %}
+                    {% endif %}
+                  </div>
+                  
+                    <div class="card-body">
+                     
+                        {% csrf_token %}
+                        <div id="link_product" class="form-group row mb-4">
+                          <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Gerar Links</label>
+                          <div style="max-width: 52%;" class="col-sm-12 col-md-7">
+                              <input class="form-control" type="url" name="site_url" id="site_url" required>
+                          </div>
+                          
+                            <input type="submit" value="Gerar"  onclick="ajaxGerarLink();" class="btn btn-primary">
+                          
+                            <!-- <input type="submit" value="Gerar" class="btn btn-primary" disabled > -->
+                          
+                        </div>
+                    </div>
+                  
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h4>Escreva o novo Anúncio</h4>
+                </div>
+                <div class="card-body">
+                  <form id="product-form" method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      {{ form.media }}
+                      
+                      {% if form.errors %}
+                      {% for field in form %}
+                      {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        <strong> {{ field.name|title }} {{ error|escape }} </strong>
+                      </div>
+                      {% endfor %}
+                      {% endfor %}
+                      {% for error in form.non_field_errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong> 
+                      </div>
+                      {% endfor %}
+                      {% endif %}
+                      
+
+                     <div class="form-group row mb-4">
+                          <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nome do Produto</label>
+                          <div class="col-sm-12 col-md-7">
+                            {{ form.title }}
+                          </div>
+                      </div>
+                      <div class="links">
+                        <div id="link_product" class="form-group row mb-4">
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Link longo:</label>
+                            <div class="col-sm-12 col-md-7">
+                                {{ form.long_url }}
+                            </div>
+                        </div>
+
+                        <div id="link_product_curto" class="form-group row mb-4">
+                          <label for="id_short_url">Link Curto:</label>
+                          <div class="col-sm-12 col-md-7">
+                              {{ form.short_url }}
+                          </div>
+                          <button id="ir_loja" type="button" class="btn btn-primary">Ir à loja</button>
+                        </div>
+                     </div>
+
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Descrição</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.description}}
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Textos</label>
+                      <div class="col-sm-12 col-md-7">
+
+                        <div id="group-inputs-1" class="container" style="display: none;">
+                          <div class="row">
+                            <div class="col-sm">
+                              <strong>Pagando Via AME R$ <span id="pag_ame_1">XXX</span></strong> 
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm">
+                              e receba R$ <span id="pag_ame_2">XXX</span> <input id="ame_1" style="margin-bottom: 10px; width: 190px;" class="form-control" type="number">% de volta
+                            </div>
+                            <div class="col-sm">
+                              Pague: R$ <input id="ame_2" style="margin-bottom: 10px; width: 190px;" class="form-control" type="number">
+                            </div>
+                            <div class="col-sm">
+                              em<input id="ame_3" style="margin-bottom: 10px; width: 190px;" class="form-control" value=12 type="number">vezes no Cartão Com Ame
+                            </div>
+                            <div class="col-sm">
+                              <button onClick="functionAme()" type="button" class="btn btn-success">Salvar</button>
+                            </div>
+                          </div>
+                          
+                        </div>
+
+                        <div id="group-inputs-2" class="container" style="display: none;">
+                          <div class="row">
+                            <div class="col-sm">
+                             Total R$<input id="unidade_1" style="margin-bottom: 10px; width: 190px;" class="form-control" type="number">
+                            </div>
+                            <div class="col-sm">
+                              Quantidade
+                              <input id="unidade_2" style="margin-bottom: 10px; width: 190px;" class="form-control" value=10 type="number">
+                              Saindo a R$ <span id="value_span2">XXX</span> cada
+                            </div>
+                            <div class="col-sm">
+                              <button onClick="functionUnidade()" type="button" class="btn btn-success">Salvar</button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="group-inputs-3" class="container" style="display: none;">
+                          <div class="row">
+                            <div class="col-sm">
+                              💳 Se for Parcelado
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm">
+                              R$<input id="parcelado_1" style="margin-bottom: 10px; width: 190px;" class="form-control" type="number">
+                            </div>
+                            <div class="col-sm">
+                              em<input id="parcelado_2" style="margin-bottom: 10px; width: 190px;" class="form-control" value=12 type="number">
+                            </div>
+                            <div class="col-sm">
+                              de R$<input id="parcelado_3" style="margin-bottom: 10px; width: 190px;" class="form-control" type="number">
+                            </div>
+                            <div class="col-sm">
+                              <button onClick="functionParcelado()" type="button" class="btn btn-success">Salvar</button>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-bottom: 5px;">
+                            <div class="col-sm">
+                              <div style="cursor: pointer;" class="btn btn-primary" onClick="functionParcelado_2(3)">3</div>
+                              <div style="cursor: pointer;" class="btn btn-primary" onClick="functionParcelado_2(4)">4</div>
+                              <div style="cursor: pointer;" class="btn btn-primary" onClick="functionParcelado_2(5)">5</div>
+                              <div style="cursor: pointer;" class="btn btn-primary" onClick="functionParcelado_2(6)">6</div>
+                              <div style="cursor: pointer;" class="btn btn-primary" onClick="functionParcelado_2(8)">8</div>
+                              <div style="cursor: pointer;" class="btn btn-primary" onClick="functionParcelado_2(10)">10</div>
+                              <div style="cursor: pointer;" class="btn btn-primary" onClick="functionParcelado_2(12)">12</div>
+                            </div>
+
+                          </div>
+                        </div>
+
+                        <div id="group-inputs-4" class="container" style="display: none;">
+                          <div class="row">
+                            <div class="col-sm">
+                              R$<input id="acima_1" style="margin-bottom: 10px; width: 190px;" class="form-control" type="number">
+                            </div>
+                            <div style="margin-top: 20px;" class="col-sm">
+                              <div onClick="functionAcima('acima')" class="btn btn-primary">Acima</div>
+                              <div onClick="functionAcima('barato')" class="btn btn-primary">Mais barato</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="group-inputs-5" class="container" style="display: none;">
+                          <div class="row">
+                            <div class="col-sm">
+                              <strong>Gerar Links</strong>
+                            </div>
+
+                            <div style="margin-bottom: 10px;" class="col-sm">
+                              <div onClick="functionLinks('gerar')" class="btn btn-primary">Gerar</div>
+                              <div onClick="functionLinks('aviso')" class="btn btn-primary">Gerar aviso</div>
+                            </div>
+                          </div>
+                          <div id="id_links_row" class="row">
+                            <div class="col-sm">
+                              <input id="gerar_descricao1" placeholder="Descrição do link" style="margin-bottom: 10px; width: 190px;" class="form-control" type="text">
+                            </div>
+                            <div class="col-sm">
+                              <input id="gerar_link1" placeholder="Link" style="margin-bottom: 10px; width: 190px;" class="form-control link" type="text">
+                            </div>
+                          </div>
+                          <div id="id_links_row" class="row">
+                            <div class="col-sm">
+                              <input id="gerar_descricao2" placeholder="Descrição do link" style="margin-bottom: 10px; width: 190px;" class="form-control" type="text">
+                            </div>
+                            <div class="col-sm">
+                              <input id="gerar_link2" placeholder="Link" style="margin-bottom: 10px; width: 190px;" class="form-control link" type="text">
+                            </div>
+                          </div>
+                          <div id="id_links_row" class="row">
+                            <div class="col-sm">
+                              <input id="gerar_descricao3" placeholder="Descrição do link" style="margin-bottom: 10px; width: 190px;" class="form-control" type="text">
+                            </div>
+                            <div class="col-sm">
+                              <input id="gerar_link3" placeholder="Link" style="margin-bottom: 10px; width: 190px;" class="form-control link" type="text">
+                            </div>
+                          </div>
+                          <div id="id_links_row" class="row">
+                            <div class="col-sm">
+                              <input id="gerar_descricao4" placeholder="Descrição do link" style="margin-bottom: 10px; width: 190px;" class="form-control" type="text">
+                            </div>
+                            <div class="col-sm">
+                              <input id="gerar_link4" placeholder="Link" style="margin-bottom: 10px; width: 190px;" class="form-control link" type="text">
+                            </div>
+                          </div>
+                          <div id="id_links_row" class="row">
+                            <div class="col-sm">
+                              <input id="gerar_descricao5" placeholder="Descrição do link" style="margin-bottom: 10px; width: 190px;" class="form-control" type="text">
+                            </div>
+                            <div class="col-sm">
+                              <input id="gerar_link5" placeholder="Link" style="margin-bottom: 10px; width: 190px;" class="form-control link" type="text">
+                            </div>
+                          </div>
+                        </div>
+
+                        <a onClick="displayblock('group-inputs-1')" style="cursor: pointer !important;">
+                          <span class="btn btn-primary">AME</span>
+                        </a>
+                        <a onClick="displayblock('group-inputs-2')" style="cursor: pointer !important;">
+                          <span class="btn btn-primary">Unidade</span>
+                        </a>
+                        <a onClick="displayblock('group-inputs-3')" style="cursor: pointer !important;">
+                          <span class="btn btn-primary">Parcelado</span>
+                        </a>
+                        <a onClick="functionCompracerta()" style="cursor: pointer !important;">
+                          <span class="btn btn-primary">CompraCerta</span>
+                        </a>
+                        <a onClick="displayblock('group-inputs-4')" style="cursor: pointer !important;">
+                          <span class="btn btn-primary">Acima de</span>
+                        </a>
+                        <a onClick="displayblock('group-inputs-5')" style="cursor: pointer !important;">
+                          <span class="btn btn-primary">Links</span>
+                        </a>
+                        <a onClick="getAmazonValue()" style="cursor: pointer !important;">
+                          <span class="btn btn-primary">Amazon</span>
+                        </a>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Aviso:</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.warning }}
+                      </div>
+                      <a style="color: #fff; text-decoration: none; margin-top: -44px; margin-left: 83.5%;" href="/admin/management/warning/add/" target="_blank"><span class="btn btn-primary">Adicionar</span></a>
+                    </div>
+
+                    <div class="categorys">
+                      <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Categoria:</label>
+                        <div class="col-sm-12 col-md-7">
+                          <select class="form-control" id="id_category"  name="category"
+                              value="{{request.POST.estados}}" >
+                              <option value="">Escolha a categoria</option>
+                              {% for cat in categorys %}
+                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                              {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">SubCategoria:</label>
+                        <div class="col-sm-12 col-md-7">
+                          <select class="form-control" id="id_subcategory"  name="subcategory">
+                              <option value="">Escolha um Subcategoria </option>
+                              {% for sub in subcategorys %}
+                                <option value="{{ sub.id }}" {% if form.subcategory.value == sub.id %} selected="selected"{% endif %}>{{ sub.name }}</option>
+                              {% endfor %}
+                          </select>
+                        </div>
+                        <a style="color: #fff; text-decoration: none; margin-top: -44px; margin-left: 84%;" href="/admin/management/subcategory/add/" target="_blank"><span class="btn btn-primary">Adicionar</span></a>
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"><i style="font-size:20px;" class="fas fa-store"></i> Loja: </label>
+                      
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.store }}
+                      </div>
+                    </div>
+                    
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">De (R$):</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.old_price }}
+                      </div>
+                    </div>
+                    
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div id="price-t" style="margin-left: 25%;" class="form-group row mb-4">
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"><i style="font-size:20px;" style="font-size:20px;" class="fas fa-dollar-sign"></i>  Preço (R$)</label>
+                            <div class="col-sm-12 col-md-7">
+                              {{ form.price }}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="calc" style="margin-left: -50px;" class="col-md-4">
+                          <div class="form-group row mb-4">
+                            <label class="col-form-label">Calcular Desconto</label>
+                            <div class="col-sm-12 col-md-7">
+                              <input style="margin-bottom: 10px; width: 180px;" class="form-control input-value" type="text">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="apply" style="margin-left: 760px; margin-top: -77px;" class="col-md-3">
+                          <button class="btn btn-primary" type="button" onClick="aplicarDesconto()">Aplicar</button>
+                          <button class="btn btn-primary" type="button" onClick="aplicarDescontoButtons(5)" >5</button>
+                          <button class="btn btn-primary" type="button" onClick="aplicarDescontoButtons(10)">10</button>
+                          <button class="btn btn-primary" type="button" onClick="aplicarDescontoButtons(15)">15</button>
+                          <button class="btn btn-primary" type="button" onClick="aplicarDescontoButtons(20)">20</button>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"><i style="font-size:20px;" class="fas fa-ticket-alt"></i> Cupom</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.coupon }}
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"><i style="font-size:20px;" class="fas fa-credit-card"></i> Forma de Pagamento:</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.form_payment }}
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"><i style="font-size:20px;" class="fas fa-cart-plus"></i> Frete:</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.freight }}
+                      </div>
+                    </div>
+                    
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Status</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.status }}
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Imagens:</label>
+                      <div class="col-sm-12 col-md-3">
+                        <div id="image-preview" class="image-preview"
+                          {% if form.image.value %}   
+                            style="background-image: url('/media/{{ form.image.value }}'); width: 250px;height: 250px;
+                            background-size: cover;background-position: center center;"  
+                          {% endif %} 
+                        >
+                          <label for="image-upload" id="image-label">Escolher Imagem Site</label>
+                          <input type="file" name="image" id="image-upload"  />
+                        </div>
+
+                      </div>
+                      
+                      <div class="col-sm-12 col-md-3">
+                        <div id="image-preview-2" class="image-preview"
+                          {% if form.image_social.value %}   
+                            style="background-image: url('/media/{{ form.image_social.value }}'); width: 250px;height: 250px;
+                            background-size: cover;background-position: center center;"  
+                          {% endif %} 
+                        >
+                          <label for="image-upload-2" id="image-label-2">Redes Sociais</label>
+                          <input type="file" name="image_social" id="image-upload-2"  />
+                        </div>
+                      </div>
+                    
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                      <div class="col-sm-12 col-md-7">
+                      
+                          {% if object.id %}
+                            {% if not object.status == 'ACTIVE' %}
+                              <a style="cursor: pointer !important;">
+                                  <span id='btn-publish' class="btn btn-info" >Publicar</span> 
+                              </a>
+                            {% else %}
+                              <button class="btn btn-success">
+                                Atualizar
+                              </button>
+                            {% endif %}
+                          {% else %}
+                            <button class="btn btn-success">
+                              Criar Anúncio
+                            </button>
+                          {% endif %}
+                        
+                        {% if object.id %}
+                          <a href="{% url 'detalhes_produto' object.id %}"><span class="btn btn-primary">Ver Detalhes</span></a>
+                        {% endif %}
+                        {% if object %}
+                        
+                        {% endif %}
+                        {% if form.title.value %}
+                        <a style="color: white;" href="https://www.google.com/search?q={{form.title.value}}&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiC596Y-P7zAhXfppUCHQwFBPAQ_AUoAnoECAEQBA&biw=1366&bih=669&dpr=1" target="_blank"><span class="btn btn-danger">Google</span></a>
+                        <a style="color: white;" href="https://www.facebook.com/search/photos/?q={{form.title.value}}" target="_blank"><span class="btn btn-danger">Facebook</span></a>
+                        {% endif %}
+
+                        <button class="btn btn-danger"  onClick="javascript:history.go(-1);">Cancelar</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>    
+</div>
+    {% endblock content %}
+
+    {% block js_page %}
+    
+     <script src="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+     <script src="{% static 'node_modules/jquery_upload_preview/assets/js/jquery.uploadPreview.min.js' %}"></script>
+     <script src="{% static 'node_modules/nicescroll/dist/jquery.nicescroll.min.js' %}"></script>
+     <!-- <script src="{% static 'assets/js/tinymce2.js' %}"></script> -->
+    
+     <script>
+        function functionAme(){
+
+          let valuePorcentagem = document.querySelector('#ame_1').value
+          let value = document.querySelector('#ame_2').value
+          let parcelas = document.querySelector('#ame_3').value
+
+          var desconto = parseFloat((value * valuePorcentagem) / 100)
+
+          document.getElementById('pag_ame_1').textContent = parseFloat(value)-desconto
+          document.getElementById('pag_ame_2').textContent = desconto
+
+          var text = `<img style="max-width: 21px !important;" src="https://admin.pechinchou.com.br/media/img/store/11/06/Enyd6m-WMAA9wlZ.jpg"><br><strong>Pagando Via AME R$ ${parseFloat(value)-desconto}<p></p></strong>
+                      Pague: R$ ${value} em ${parcelas}x no Cartão Com Ame e receba R$ <span style="display: inline-block" id="valorcashbc">${desconto}</span> (${valuePorcentagem}% de volta)<br>
+                      <p><img style="max-width: 21px !important;" src="https://admin.pechinchou.com.br/media/img/store/11/06/Enyd6m-WMAA9wlZ.jpg"> <strong>Mas o que é o AME?</strong><br>
+                      AME digital é um APP das Lojas Americanas/Shoptime/Submarino, Quando você faz compras pelo AME você recebe uma parte do valor de volta para usar em uma futura compra nesses sites!`
+
+          navigator.clipboard.writeText(text);
+
+          alert("Copiado para area de transferência!")
+        }
+
+        function functionUnidade(){
+          let value = document.querySelector('#unidade_1').value
+          let quantidade = document.querySelector('#unidade_2').value
+
+          let res = parseFloat(value / quantidade)          
+
+          var text = `❗ ${quantidade} , <strong>Saindo a R$ ${res} cada</strong>`
+          navigator.clipboard.writeText(text);
+
+          document.querySelector('#value_span2').textContent = res
+          alert("Copiado para area de transferência!")
+        }
+
+        function functionParcelado(){
+          let value = document.querySelector('#parcelado_1').value
+          let parcela = document.querySelector('#parcelado_2').value
+
+          var desconto = parseFloat(value/parcela)
+
+          document.querySelector('#parcelado_3').value = desconto.toFixed(2)
+          var text = `<strong>💳 Se for Parcelado</strong><br>R$ ${value} em ${parcela}x de R$ ${desconto.toFixed(2)} `
+          navigator.clipboard.writeText(text);
+
+          alert("Copiado para area de transferência!")
+        }
+
+        function functionParcelado_2(value){
+          
+          document.querySelector('#parcelado_2').value = value
+        }
+
+        function functionCompracerta() {
+          var text = "<strong>SIGA OS PASSOS</strong><br> 1 – Para Se Cadastrar Clique: <a style='cursor:pointer;' target='_blank' href='https://bit.ly/pechinchoucompracerta'>https://bit.ly/pechinchoucompracerta</a><br> 2 – E Depois Aqui Para Comprar<a target='_blank' href='''></a>"
+          navigator.clipboard.writeText(text);
+          alert("Copiado para area de transferência!")
+        }
+
+        function functionAcima(option){
+            let value = document.querySelector('#acima_1').value
+            if (option == 'acima'){
+              text = `↗ Acima de <strong>R$ ${value}</strong> em outras lojas!`
+            }
+            else{
+              text = `R$ ${value} mais barato que outras lojas!`
+            }
+
+          navigator.clipboard.writeText(text);
+          alert("Copiado para area de transferência!")
+
+        }
+        function functionLinks(option){ 
+          if(option=='gerar'){
+            let text =""
+            for(let i=1;i<6; i++){
+              descricao = document.getElementById('gerar_descricao'+i).value
+              link = document.getElementById('gerar_link'+i).value
+              if (link != ""){ 
+                text += `<p>${descricao}: <a style="cursor: pointer;" href="${link}" rel="noopener">${link}</a><br>`
+              }
+            }
+            navigator.clipboard.writeText(text);
+            alert("Copiado para area de transferência!")
+          }else{
+            let text =""
+            for(let i=1;i<6; i++){
+              descricao = document.getElementById('gerar_descricao'+i).value
+              link = document.getElementById('gerar_link'+i).value
+              if (link != ""){ 
+                text += `{${descricao}|${link}}<br>`
+              }
+            }
+            navigator.clipboard.writeText(text);
+            alert("Copiado para area de transferência!") 
+          }
+        }
+
+        function getAmazonValue(){
+          text = `<p>📦 Frete Grátis para assinantes <strong>Amazon Prime</strong>: Veja como funciona: <a href="http://amzn.to/35b7gSc" target="_blank">http://amzn.to/35b7gSc</a></p>`
+
+          navigator.clipboard.writeText(text);
+          alert("Copiado para area de transferência!")
+        }
+
+       function displayblock(id){
+         for(let i = 1; i<7; i++){
+            var aux = 'group-inputs-'+i
+            if (aux == id){
+              var b = document.getElementById(id);
+              b.style.display = 'block';
+            }
+            else {
+              var b = document.getElementById(aux);
+              b.style.display = 'none';
+            }
+         }
+       }
+     </script>
+   
+     <script>
+        let inputValue = document.querySelector('#id_short_url').value;
+          
+        let goTo = document.getElementById('ir_loja')
+        goTo.href = inputValue
+
+        document.querySelector('#id_price').style.width = '165px'
+        
+
+        function add_values_parcel(value){
+          document.getElementById('')
+        }
+      
+
+      function aplicarDesconto(){
+        let inputPrice = document.getElementById('id_price').value
+
+        let inputValueDesconto = document.querySelector('.form-control.input-value').value
+        let desconto = (parseFloat(inputPrice) * parseFloat(inputValueDesconto)) / 100
+    
+        document.getElementById('id_price').value = (parseFloat(inputPrice) - desconto)
+        
+      }
+
+      function aplicarDescontoButtons(value){
+        let inputPrice = document.getElementById('id_price').value
+        var desconto = ((parseFloat(inputPrice) * value) / 100)
+        
+        document.getElementById('id_price').value = (parseFloat(inputPrice) - desconto)
+      }
+
+
+      function getValueUrlProduct(){
+        let n = document.querySelector('#id_long_url')
+        let u = document.querySelector('#id_short_url')
+        
+        u.value = n.value
+      }
+
+    $("#id_category").change(function () {
+         const objetctID = $(this).val();  
+         console.log("teste: " + objetctID )// get the selected subject ID from the HTML dropdown list 
+         const x = $.ajax({   
+                    // initialize an AJAX request
+             type: "POST",
+             url: '{% url "get_categoria_ajax" %}',
+             data: {
+                 'category_id': objetctID,       // add the country id to the POST parameters
+                 'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+             },
+             success: function (data) {   // `data` is from `get_topics_ajax` view function
+              let html_data = '<option value="">---------</option>';
+                 data.forEach(function (data) {
+                     html_data += `<option value="${data.id}">${data.name}</option>`
+                 });
+                 $("#id_subcategory").html(html_data);// replace the contents of the topic input with the data that came from the server
+             }
+         })
+         
+
+     });
+
+    function ajaxGerarLink(){
+      var data_url = $("#site_url").val();  +
+      console.log(data_url)              
+      $.ajax({
+          type: "POST",
+          url: '{% url "generate_links_new" %}',
+          data: {
+            'data_url':data_url,
+            'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+            }  ,
+          success: function(data) {
+              $("#id_long_url").val(data.url_long);
+              $("#id_short_url").val(data.url_short);
+          },
+          error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+          }    
+          
+      }); 
+      return false;   
+    }
+    
+    $('#ir_loja').click(function(){
+      var url = $("#id_short_url").val(); 
+      window.open(url, "_blank");
+    })
+
+    </script>
+
+    <script>
+      $.uploadPreview({
+        input_field: "#image-upload",   // Default: .image-upload
+        preview_box: "#image-preview",  // Default: .image-preview
+        label_field: "#image-label",    // Default: .image-label
+        label_default: "Choose File",   // Default: Choose File
+        label_selected: "Site",  // Default: Change File
+        no_label: false,                // Default: false
+        success_callback: null,          // Default: null
+
+      });
+
+      $.uploadPreview({
+        input_field: "#image-upload-2",   // Default: .image-upload
+        preview_box: "#image-preview-2",  // Default: .image-preview
+        label_field: "#image-label-2",    // Default: .image-label
+        label_default: "Choose File",   // Default: Choose File
+        label_selected: "Rede Social",  // Default: Change File
+        no_label: false,                // Default: false
+        success_callback: null,          // Default: null
+
+      });
+
+      // submit para publicar
+      var searchform = $('#product-form')
+      var searchbtn = $('#btn-publish')
+
+        $(searchbtn).on('click', function(){
+          searchform.submit();
+        })
+
+    </script>
+    {% endblock js_page %}

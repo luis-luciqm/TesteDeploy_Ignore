@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"></link>
+
+{% endblock css %}
+
+{% block content %}
+<div class="main-content" >
+    <section class="section">
+        <div class="section-header">
+          <div class="section-header-back">
+            <a href="features-posts.html" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+          </div>
+          <h1>Criar Novo Anúncio</h1>
+          <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="#">Anúncios</a></div>
+            <div class="breadcrumb-item">Criar Novo Anúncio</div>
+          </div>
+        </div>
+    </section>
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Escreva o novo Anúncio</h4>
+                </div>
+                <div class="card-body">
+                  <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                    
+                      {% if form.errors %}
+                      {% for field in form %}
+                      {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ field.name|title }} {{ error|escape }}</strong>
+                      </div>
+                      {% endfor %}
+                      {% endfor %}
+                      {% for error in form.non_field_errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                      {% endfor %}
+                      {% endif %}
+
+                      <div class="form-group row mb-4">
+                          <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nome do Produto</label>
+                          <div class="col-sm-12 col-md-7">
+                              <input type="text" id="title" name="title" value="{{ form.instance.title }}" class="form-control">
+                          </div>
+                      </div>
+
+                      <div class="form-group row mb-4">
+                 
+                        <select class="form-control border-right-0" id="categoria_id"  name="categoria">
+                            <option value="">Escolha o segmento</option>
+                            <option value="1">teste1</option>
+                            <option value="2">teste2</option>
+
+                      </select>
+                    </div>
+
+                      <div class="form-group row mb-4">
+                          <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Link da Loja</label>
+                          <div class="col-sm-12 col-md-7">
+                              {{ form.long_url }}
+                          </div>
+                      </div>
+
+               
+
+
+                <!--     
+                    <div class="form-group row mb-4">
+
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Preço</label>
+                      <div class="col-sm-12 col-md-3">
+                        <input type="text" class="form-control inputtags">
+                      </div>
+
+                      <label class="col-form-label text-md-right col-12 col-md-2 col-lg-1">De</label>
+                      <div class="col-sm-12 col-md-3">
+                        <input type="text" class="form-control inputtags">
+                      </div>
+
+                    </div>
+                  -->
+             
+                   
+                    
+                    
+         
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                      <div class="col-sm-12 col-md-7">
+                        <button class="btn btn-primary">Criar Anúncio</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>    
+</div>
+    {% endblock content %}
+
+    {% block js_page %}
+    
+    <script src="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+    <script src="{% static 'node_modules/nicescroll/dist/jquery.nicescroll.min.js' %}"></script>
+    <script src="{% static 'node_modules/jquery_upload_preview/assets/js/jquery.uploadPreview.min.js' %}"></script>
+   <script src="{% static 'node_modules/selectric/public/jquery.selectric.min.js' %}"></script>
+
+    
+     <script>
+        $( "#categoria_id" )
+          .select(function () {
+            var str = "";
+            console.log("teste")
+          })
+          .change();
+        </script>
+ 
+ 
+     <script>
+
+        $("#categoria_id").select(function () {
+            console.log("teste!!")
+            
+        });
+    </script>
+    {% endblock js_page %}

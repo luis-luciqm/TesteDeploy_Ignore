@@ -1,0 +1,76 @@
+{% extends 'base.html'%}
+
+    {% block content %}
+    
+    <div class="main-content" >
+        <section class="section">
+          <div class="section-header">
+            <div class="section-header-back">
+              <a href="{% url 'dashboard'%}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Listagem de Usuário</h1>
+            <div class="section-header-breadcrumb">
+              <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+              <div class="breadcrumb-item">Listagem de Usuário</div>
+            </div>
+          </div>
+        {% if users %}
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-12">
+              <div class="card">
+                
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                      <thead>
+                        <tr>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Telefone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Ações</th>
+                            <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for user in users %}
+                              <tr>
+                                <td id="column-name-store">{{user.username}}</td>
+                                <td id="column-url-store">{{user.phone}}</td>
+                                <td id="column-url-store">{{user.email}}</td>
+                        
+                                <td>
+                                  {% if user.is_active %}
+                                    <div class="badge badge-success">Ativo</div>
+                                  {% else %}
+                                    <div style="background-color: rgb(109, 107, 107);" class="badge badge-secondary">Inativo</div>
+                                  {% endif %}
+                                </td>
+
+                                <td class="column-action-store">
+                                  <a href="{% url 'editar_usuario' user.id%}"><button class="btn btn-primary">Editar</button></a>
+                                  {% if user.is_active %}
+                                  <a href="{% url 'desativar_usuario' user.id  %}"><button class="btn btn-danger">Desativar</button></a>
+                                  {% else %}
+                                  <a href="{% url 'ativar_usuario' user.id  %}"><button class="btn btn-success">Ativar</button></a>
+                                  {% endif %}
+                                </td>
+                              </tr>  
+                          {%endfor%}
+                      </tbody>
+                    </table> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% else %}
+            <div class="section-header">
+                <h1>Nenhum funcionário cadastrado ainda</h1>
+            </div>
+        {% endif%}  
+        </section>
+    </div>
+    
+
+    {% endblock content %}

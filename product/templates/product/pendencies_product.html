@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+{% block content %}
+<div class="main-content">
+    <section class="section">
+      <div class="section-header">
+        <h1>Anúncios com Pendências</h1>
+        <div class="section-header-breadcrumb">
+          <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+          <div class="breadcrumb-item"><a href="#">Posts</a></div>
+          <div class="breadcrumb-item">All Posts</div>
+        </div>
+      </div>
+      <div class="section-body">
+     
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card mb-0">
+              <div class="card-body">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'pendente_produto' %}">All <span class="badge badge-white">{{products|length}}</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'listar_produto_pendente_ativo' %}">Ativos<span class="badge badge-primary">1</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{%url 'listar_produto_pendente_destaque' %}">Destacados <span class="badge badge-primary">1</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Reportados<span class="badge badge-primary">0</span></a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Anúncios</h4>
+              </div>
+              <div class="card-body">
+                <div class="float-left">
+                  <select class="form-control selectric">
+                    <option>Informática</option>
+                    <option>Games</option>
+                    <option>Smartphones, tablets e telefones</option>
+                    <option>Filmes, Música e Seriados</option>
+                  </select>
+                </div>
+                <div class="float-left">
+                  <select class="form-control selectric">
+                    <option>Casa e Crianças</option>
+                    <option>Bebê e Infantil</option>
+                    <option>Cama, Mesa e Banho</option>
+                    <option>Higiene</option>
+                  </select>
+                </div>
+                <div class="float-left">
+                  <select class="form-control selectric">
+                    <option>Outras</option>
+                    <option>Alimentos e Bebidas</option>
+                    <option>Moda e Calçados</option>
+                    <option>Relógio e joalheria</option>
+                  </select>
+                </div>
+                <div class="float-left">
+                  <form action="" method="post">
+                    <input class="btn btn-primary" style="margin-left:5px;" type="submit" value="Filtrar">
+                  </form>
+                  
+                </div>
+                <div class="float-right">
+                  <form method="GET" id="search-form">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Search" name="search">
+                      <div class="input-group-append">
+                        <button class="btn btn-primary"><i id="search-btn" class="fas fa-search"></i></button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="clearfix mb-3"></div>
+
+                <div class="table-responsive">
+                  {% if not page_obj %}
+                    <span class="text-primary">Não foi encontrado nada relacionado a sua busca. <a class="text-info" href="{% url 'pendente_produto'%}">Tela inicial</a></span>
+                  {% else %}
+                  <table class="table table-striped">
+                    <tr>
+                      <th>Imagem</th>
+                      <th>Descrição</th>
+                      <th>Loja</th>
+                      <th>Sociais</th>
+                    </tr>
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            <a href="#">
+                              {% if product.image %}
+                                <img alt="image" src="/media/{{product.image}}" class="rounded-circle" width="65" data-toggle="title" title="">
+                              {% else %}
+                               <img alt="image" src="{% static 'assets/img/avatar/avatar-5.png' %}" class="rounded-circle" width="65" data-toggle="title" title="">
+                              {% endif %}
+                            </a>
+                        </td>
+                        <td style="max-width: 350px;"> 
+                          {{product.title}}
+                        </td>
+                        
+                        <td>{{ product.store.name}}</td>
+
+                        <td> 
+                            {% if product.active %}
+                            <div id="whatsapp" class="badge" data-toggle="tooltip" data-placement="top" title="Whatsapp"><img style="-webkit-filter: grayscale(100%); filter: grayscale(100%);filter: gray; " src="{% static 'assets/img/wpp.png'%}" alt=""> </div>
+                            <div id="instagram" class="badge" data-toggle="tooltip" data-placement="top" title="Telegram"> <img style="-webkit-filter: grayscale(100%); filter: grayscale(100%);filter: gray; " src="{% static 'assets/img/telegram.png'%}" alt=""></div>
+                            <div id="telegram" class="badge" data-toggle="tooltip" data-placement="top" title="Instagram"><img style="-webkit-filter: grayscale(100%); filter: grayscale(100%);filter: gray;" src="{% static 'assets/img/insta.png'%}" alt=""> </div> 
+                            {% else %}
+                            <div id="whatsapp" class="badge" data-toggle="tooltip" data-placement="top" title="Whatsapp"><img src="{% static 'assets/img/wpp.png'%}" alt=""> </div>
+                            <div id="instagram" class="badge" data-toggle="tooltip" data-placement="top" title="Telegram"> <img  src="{% static 'assets/img/telegram.png'%}" alt=""></div>
+                            <div id="telegram" class="badge" data-toggle="tooltip" data-placement="top" title="Instagram"><img src="{% static 'assets/img/insta.png'%}" alt=""> </div> 
+                            {% endif%}
+                          </td>
+
+                    </tr>
+                    {% endfor %}
+                 
+                 
+                
+                  </table>
+                </div>
+                <div class="float-right">
+                  <nav>
+                    <ul class="pagination">
+                      <li class="page-item">
+                        {% if page_obj.has_previous %}
+                          <a class="page-link" href="?page=1">&laquo; Primeiro</a>
+                        {% endif %}
+                      </li>
+
+                      <li class="page-item">
+                        {% if page_obj.has_previous %}
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                        {% endif %}
+                      </li>
+                      <li class="page-item active">
+                        <a class="page-link" href="#">{{ page_obj.number }}</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">of</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">{{ page_obj.paginator.num_pages }}</a>
+                      </li>
+                      <li class="page-item">
+                        {% if page_obj.has_next %}
+                          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próximo</a>
+                          
+                        {% endif %}
+                      </li>
+                      <li class="page-item">
+                        {% if page_obj.has_next %}
+                          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último &raquo;</a>
+                        {% endif %}
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+{% endblock content %}
+
+ {% block js_page %}
+    
+    <script src="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+    <script src="{% static 'node_modules/nicescroll/dist/jquery.nicescroll.min.js' %}"></script>
+
+{% endblock js_page %}

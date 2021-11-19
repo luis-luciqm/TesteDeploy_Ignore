@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+{% block content %}
+<div class="main-content">
+    <section class="section">
+      <div class="section-header">
+        <div class="section-header-back">
+          <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+        </div>
+        <h1>Lista de Anúncios</h1>
+        <div class="section-header-button">
+          <a href="{% url 'cadastrar_produto'%}" class="btn btn-primary">Criar Novo Anúncio</a>
+        </div>
+        <div class="section-header-breadcrumb">
+          <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+            <div class="breadcrumb-item">Listar Anúncios</div>
+        </div>
+      </div>
+      <div class="section-body">
+
+        {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+              <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+        {% endif %}
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card mb-0">
+              <div class="card-body">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    {% if color_navbar_all %}
+                      <a id="id_all" class="nav-link {{color_navbar_all}}" href="{% url 'listar_produto' option='todos' %} ">Todos <span class="badge badge-primary">{{all_products}}</span></a>
+                    {% else %}
+                      <a id="id_all" class="nav-link" href="{% url 'listar_produto' option='todos' %} ">Todos <span class="badge badge-primary">{{all_products}}</span></a>
+                    {% endif %}
+                  </li>
+                  <li class="nav-item">
+                    {% if color_navbar_reports %}
+                      <a class="nav-link {{color_navbar_reports}}" href="{% url 'listar_produto' option='reportados' %}">Reportados<span class="badge badge-primary">{{products_reports}}</span></a>
+                    {% else %}
+                      <a class="nav-link" href="{% url 'listar_produto' option='reportados' %}">Reportados<span class="badge badge-primary">{{products_reports}}</span></a>
+                    {% endif %}
+                  </li>
+                  <li class="nav-item">
+                    {% if color_navbar_pending %}
+                      <a class="nav-link {{color_navbar_pending}}" href="{% url 'listar_produto' option='pendentes' %}">Pendentes<span class="badge badge-primary">{{ products_pending}}</span></a>
+                    {%  else %}
+                      <a class="nav-link" href="{% url 'listar_produto' option='pendentes' %}">Pendentes<span class="badge badge-primary">{{ products_pending}}</span></a>
+                    {% endif %}
+                  </li>
+                  <li class="nav-item">
+                    {% if color_navbar_active %}
+                    <a class="nav-link {{color_navbar_active}}" href="{% url 'listar_produto' option='ativos' %}">Ativos<span class="badge badge-primary">{{products_active}}</span></a>
+                    {% else %}
+                    <a class="nav-link" href="{% url 'listar_produto' option='ativos' %}">Ativos<span class="badge badge-primary">{{products_active}}</span></a>
+                    {% endif %}
+                  </li>
+
+
+                   <li class="nav-item">
+                    {% if color_navbar_exclusive %}
+                      <a class="nav-link {{color_navbar_exclusive}}" href="{% url 'listar_produto' option='exclusivos' %}">Exclusivos <span class="badge badge-primary">{{products_exclusive}}</span></a>
+                    {% else %}
+                      <a class="nav-link" href="{% url 'listar_produto' option='exclusivos' %}">Exclusivos <span class="badge badge-primary">{{products_exclusive}}</span></a>
+                    {% endif %}
+                  </li>
+
+
+                  <li class="nav-item">
+                    {% if color_navbar_relevant %}
+                      <a class="nav-link {{color_navbar_relevant}}" href="{% url 'listar_produto' option='destacados' %}">Destacados <span class="badge badge-primary">{{products_highlight}}</span></a>
+                    {% else %}
+                      <a class="nav-link" href="{% url 'listar_produto' option='destacados' %}">Destacados <span class="badge badge-primary">{{products_highlight}}</span></a>
+                    {% endif %}
+                  </li>
+                  <li class="nav-item">
+                    {% if color_navbar_closed %}
+                      <a class="nav-link {{ color_navbar_closed }} " href="{% url 'listar_produto' option='encerrados' %}">Encerrados<span class="badge badge-primary">{{ products_closed}}</span></a>
+                    {%  else %}
+                      <a class="nav-link" href="{% url 'listar_produto' option='encerrados' %}">Encerrados<span class="badge badge-primary">{{ products_closed}}</span></a>
+                    {% endif %}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% if not color_navbar_reports %}
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="card">
+              {% if not page_obj %}
+                <div class="card">
+                  <div class="card-header">
+                      <p style="margin: auto;" class="text-primary"><b> Nenhum Anúncio Cadastrado no Sistema</b></p>
+                  </div>
+                </div>
+              {% else %}
+              <div class="card-header">
+                <h4>Anúncios</h4>
+              </div>
+              <div class="card-body">
+                <div class="float-left">
+                <form method="GET" id="search-form">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Search" name="search">
+                      <div class="input-group-append">
+                        <button class="btn btn-primary"><i id="search-btn" class="fas fa-search"></i></button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                
+                <div class="float-right">
+                  <form method="GET" id="search-form">
+                    <div class="input-group">
+                      <select class="form-control selectric" name="search_category">
+                        {% for sub in all_subcategorys %} 
+                          <option value="{{sub.name}}">{{sub.name}}</option>
+                        {% endfor %}
+                      </select>
+                      <button id="search-btn" class="btn btn-primary">Buscar</button>
+                    </div>
+                  </form>
+                </div>
+                
+
+                <div class="clearfix mb-3"></div>
+
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <tr style="text-align: center;">
+                      <th>Imagem</th>
+                      <th>Descrição</th>
+                      <th>Status</th>
+                      <th>Ações</th>
+                      {% if color_navbar_pending %}
+                        <th ><a class="text-danger" href="{% url 'excluir_todos_pendentes' %}"><b>Excluir Todos</b></a></th>
+                      {% endif %}
+                    </tr>
+                  
+                    {% for product in page_obj %}
+                    <tr>
+                        <td>
+                            <a href="#">
+                              {% if product.image %}
+                                <img alt="image" src="/media/{{product.image}}" width="65" data-toggle="title" title="">
+                              {% else %}
+                                <img src="https://w7.pngwing.com/pngs/998/203/png-transparent-black-and-white-no-to-camera-logo-video-on-demand-retail-website-simple-no-miscellaneous-television-text.png" width="45"  class="mr-1" alt="">
+                              {% endif %}
+                            </a>
+                        </td>
+                        <td style="max-width: 350px; text-align:center;"> 
+                          {{product.title}}
+                          <p style="font-size: 9px;"><i style="font-size: 9px;" class="far fa-clock"></i> há {{product.updated_at|timesince }}</p>
+                        </td>
+
+
+                        <td>
+                          {% if product.status == 'ACTIVE' %}
+                              <div class="badge badge-success">Ativo</div>
+                          {% elif product.status == 'PENDING' %}
+                              <div style="background-color: rgb(109, 107, 107);" class="badge badge-secondary">Pendente</div>
+                          {% else %}
+                              <div style="background-color: rgb(109, 107, 107);" class="badge badge-secondary">Encerrado</div>
+                          {% endif %}
+
+                          {% if product.relevant %}
+                            <div class="badge badge-danger">Destacado</div>
+                          {% endif %}
+
+                          {% if product.exclusive %}
+                            <div class="badge badge-success">Exclusivo</div>
+                          {% endif %}
+
+                        </td>
+
+                        <td style="text-align: center;">
+                          <a class="badge nav-link text-primary" href="{% url 'detalhes_produto' product.id%}"><b>Detalhes</b></a>
+                          <div class="bullet"></div>
+                          {% if not product.status == 'ACTIVE' %}
+                            <a  class="badge nav-link text-primary" href="{% url 'editar_produto' product.id 'publicar' %}"><b>Editar</b></a>
+                          {% else %}
+                            <a  class="badge nav-link text-primary" href="{% url 'editar_produto' product.id 'atualizar' %}"><b>Editar</b></a>
+                          {% endif %}
+                          <div class="bullet"></div>
+                          {% if product.status == 'ACTIVE' %}
+                            <a  class="badge nav-link text-primary" href="{% url 'acoes_tela_listagem' pk=product.id option='encerrar'%}"><b>Encerrar</b></a>
+                          {% else %}
+                            <a  class="badge nav-link text-primary" href="{% url 'acoes_tela_listagem' pk=product.id option='ativar' %}"><b>Ativar</b></a>
+                          {% endif %}
+                          <div class="bullet"></div>
+                          {% if not product.relevant %}
+                            <a class="badge nav-link text-primary" href="{% url 'acoes_tela_listagem' pk=product.id option='add_destaques' %}"><b>Adicionar aos Destaques</b></a>
+                          {% else %}
+                          <a class="badge nav-link text-primary" href="{% url 'acoes_tela_listagem' pk=product.id option='remove_destaques' %}"><b>Remover dos Destaques</b></a>
+                          {% endif %} 
+                          <div class="bullet"></div>
+                          {% if not product.exclusive %}
+                            <a class="badge nav-link text-primary" href="{% url 'acoes_tela_listagem' pk=product.id option='add_exclusivos' %}"><b>Adicionar aos Exclusivos</b></a>
+                          {% else %}
+                            <a class="badge nav-link text-primary" href="{% url 'acoes_tela_listagem' pk=product.id option='remove_exclusivos' %}"><b>Remover dos Exclusivos</b></a>
+                          {% endif%}
+                          {% if color_navbar_pending == 'active' or color_navbar_closed == 'active' %}
+                          <div class="bullet"></div>
+                          <a class="badge nav-link text-danger" href="{% url 'excluir_produto' product.id %}"><b>Excluir</b></a>
+                          {% endif %}
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                  
+                 
+                  </table>
+                </div>
+                <div class="float-right">
+                  <nav>
+                    <ul class="pagination">
+                      <li class="page-item">
+                        {% if page_obj.has_previous %}
+                          <a class="page-link" href="?page=1">&laquo; Primeiro</a>
+                        {% endif %}
+                      </li>
+
+                      <li class="page-item">
+                        {% if page_obj.has_previous %}
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                        {% endif %}
+                      </li>
+                      <li class="page-item active">
+                        <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">de</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                      </li>
+                      <li class="page-item">
+                        {% if page_obj.has_next %}
+                          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próximo</a>
+                          
+                        {% endif %}
+                      </li>
+                      <li class="page-item">
+                        {% if page_obj.has_next %}
+                          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último &raquo;</a>
+                        {% endif %}
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+              {% endif%}
+            </div>
+          </div>
+        </div>
+        {% else %}
+          {% if not page_obj %}
+            <div class="card">
+              <div class="card-header">
+                  <p style="margin: auto;" class="text-primary"><b> Nenhum Anúncio Cadastrado no Sistema</b></p>
+              </div>
+            </div>
+          {% else %}
+            <div style="margin-top:25px;" class="row sortable-card ui-sortable">
+              {% for product in page_obj %}
+                <div class="col-12 col-md-6 col-lg-3">
+                  <div id="id_card" class="card" style="text-align: center;">
+                    <div class="card-header ui-sortable-handle">
+                        <img style="border: 0px; max-height: 170px; margin: auto;" class="img-fluid img-thumbnail" src="/media/{{product.image}}" alt="">
+                    </div>
+                    <div class="card-body">
+                        <p style="width: 100%; height: 100px;"><b>{{product.title}}</b></p>
+
+                        <div id="class_btn_report">
+                          <a href="{% url 'marcar_resolvido' product.id %}"><span style="width: 100%;" class="btn btn-primary">Resolvido<span></a>
+                          <a href="{% url 'detalhes_produto' product.id %}"><span style="width: 100%; margin-top: 2%;" class ="btn btn-primary">Detalhes</span></a>
+                        </div>
+                        
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif%}
+        {% endif%}
+      </div>
+    </section>
+  </div>
+
+{% endblock content %}
+
+ {% block js_page %}
+    
+    <script src="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+    <script src="{% static 'node_modules/nicescroll/dist/jquery.nicescroll.min.js' %}"></script>
+
+{% endblock js_page %}

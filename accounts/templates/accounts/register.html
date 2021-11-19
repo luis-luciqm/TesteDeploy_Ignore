@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+{% load static  %}
+
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Register &mdash; Stisla</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+</head>
+
+<body>
+  <div id="app">
+    <section class="section">
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
+            <div class="login-brand">
+              <img src="{% static  'assets/img/Pechinchou.png' %}" alt="logo" width="100" class="shadow-light rounded-circle">
+            </div>
+
+            <div class="card card-primary">
+              <div class="card-header"><h4 style="color: #fb6262;">Register</h4></div>
+             
+              {% if form.errors %}
+              {% for field in form %}
+              {% for error in field.errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ field.name|title }} {{ error|escape }}</strong>
+              </div>
+              {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+              {% endfor %}
+              {% endif %}
+
+              <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                      <input type="text" class="form-control" placeholder="Nome Completo" name="fullname" value="{{ form.instance.fullname }}">
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <span class="fas fa-user"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <input type="text" class="form-control" placeholder="Username" name="username" value="{{ form.instance.username }}">
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <span class="fas fa-user"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="input-group mb-3">
+                      <input type="email" class="form-control" placeholder="Email" name="email" value="{{ form.instance.email }}">
+            
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <span class="fas fa-envelope"></span>
+                        </div>
+                      </div>
+                    </div>
+                        
+                    <div class="input-group mb-3">
+                      <input type="password" class="form-control" placeholder="Password" name="password1" value="{{ password1 }}">
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <span class="fas fa-lock"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <input type="password" class="form-control" placeholder="Retype password" name="password2" value="{{ password2 }}">
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <span class="fas fa-lock"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <button id="btn_register" type="submit" class="btn btn-primary btn-lg btn-block">
+                        Cadastrar
+                      </button>
+                    </div>
+                </form>
+                <div class="mt-5 text-muted text-center">
+                  <a href="{% url 'login' %}">Já Possui conta</a>
+                 </div>
+              </div>
+             
+            </div>
+
+            
+           
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="{% static 'assets/js/stisla.js' %}"></script>
+
+ 
+
+  <!-- Template JS File -->
+  <script src="{% static 'assets/js/scripts.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="{% static 'assets/js/page/auth-register.js' %}"></script>
+</body>
+</html>

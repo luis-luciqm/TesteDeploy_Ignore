@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+{% block content %}
+<div class="main-content">
+    <section class="section">
+      <div class="section-header">
+        <h1>Lista de Anúncios</h1>
+        <div class="section-header-button">
+          <a href="features-post-create.html" class="btn btn-primary">Criar novo Anuncio</a>
+        </div>
+        <div class="section-header-breadcrumb">
+          <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+          <div class="breadcrumb-item"><a href="#">Posts</a></div>
+          <div class="breadcrumb-item">All Posts</div>
+        </div>
+      </div>
+      <div class="section-body">
+     
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card mb-0">
+              <div class="card-body">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Todos <span class="badge badge-white">5</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Informática <span class="badge badge-primary">1</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Eletrodoméstico <span class="badge badge-primary">1</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Relógios e Jóias <span class="badge badge-primary">0</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Games<span class="badge badge-primary">0</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Anúncios</h4>
+              </div>
+              <div class="card-body">
+                <div class="float-left">
+                  <select class="form-control selectric">
+                    <option>Action For Selected</option>
+                    <option>Move to Draft</option>
+                    <option>Move to Pending</option>
+                    <option>Delete Pemanently</option>
+                  </select>
+                </div>
+                <div class="float-right">
+                  <form>
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Search">
+                      <div class="input-group-append">
+                        <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="clearfix mb-3"></div>
+
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <tr>
+                      <th>Imagem</th>
+                      <th>Descrição</th>
+                      <th>Categoria</th>
+                      <th>Loja</th>
+                      <th></th>
+                    </tr>
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            <a href="#">
+                              {% if product.image %}
+                                <img alt="image" src="/media/{{product.image}}" class="rounded-circle" width="65" data-toggle="title" title="">
+                              {% else %}
+                               <img alt="image" src="{% static 'assets/img/avatar/avatar-5.png' %}" class="rounded-circle" width="65" data-toggle="title" title="">
+                              {% endif %}
+                            </a>
+                        </td>
+                        <td> {{product.title}}
+                            <div class="table-links">
+                            <a href="#">Detalhes</a>
+                            <div class="bullet"></div>
+                            <a href="{% url 'editar_produto' product.id %}">Editar</a>
+                            <div class="bullet"></div>
+                            <a href="#" class="text-danger">Trash</a>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="#">Web Developer</a>,
+                            <a href="#">Tutorial</a>
+                        </td>
+                        
+                        <td>{{ product.store.name}}</td>
+                        <td><div class="badge badge-primary">Published</div></td>
+                    </tr>
+                    {% endfor %}
+                 
+                 
+                
+                    
+
+                  </table>
+                </div>
+                <div class="float-right">
+                  <nav>
+                    <ul class="pagination">
+                      <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                      </li>
+                      <li class="page-item active">
+                        <a class="page-link" href="#">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock content %}
+
+ {% block js_page %}
+    
+    <script src="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+    <script src="{% static 'node_modules/nicescroll/dist/jquery.nicescroll.min.js' %}"></script>
+
+{% endblock js_page %}

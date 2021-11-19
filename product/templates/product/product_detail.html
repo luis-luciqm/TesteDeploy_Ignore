@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <div class="section-header-back">
+                <a href="{% url 'dashboard' %}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Detalhes do Anúncio</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Listar Produtos</a></div>
+                <div class="breadcrumb-item">Detalhes</div>
+            </div>
+        </div>
+        <div class="section-body">
+
+
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+
+                                <div data-interval="2500" id="carouselExampleIndicators3" class="carousel slide carousel-fade" data-ride="carousel" style="height: auto;width: auto;overflow: hidden;">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#carouselExampleIndicators3" data-slide-to="0" class="active">
+                                        </li>
+                                        <li data-target="#carouselExampleIndicators3" data-slide-to="1"></li>
+                                    </ol>
+                                        {% if object.image %}
+                                            <div class="carousel-item active">
+                                                <img class="d-block w-100" src="/media/{{ object.image }}"
+                                                alt="First slide">
+                                            </div>
+                                        {% else %}
+                                            <div class="carousel-item active">
+                                                <img class="d-block w-100" src="https://www.escritoriodominio.com.br/wp-content/themes/consultix/images/no-image-found-360x260.png"
+                                                alt="First slide">
+                                            </div>
+                                        {% endif %}
+
+                                        {% if object.image_social %}
+                                            <div class="carousel-item">
+                                                <img class="d-block w-100" src="/media/{{ object.image_social }}"
+                                                style="width: 100% !important;" 
+                                                    alt="Second slide">
+                                            </div>
+
+                                        {% else %}
+                                            <div class="carousel-item">
+                                                <img class="d-block w-100" src="https://www.escritoriodominio.com.br/wp-content/themes/consultix/images/no-image-found-360x260.png"
+                                                style="width: 100% !important;" 
+                                                alt="First slide">
+                                            </div>
+                                        {% endif %}
+
+                                    
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators3" role="button"
+                                        data-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators3" role="button"
+                                        data-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-globe mr-2 icon-inline">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path
+                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                        </path>
+                                    </svg>Website</h6>
+                                <a href="{{ object.short_url}}" target="_blank"><span class="text-secondary">{{ object.short_url}}</span></a>
+                            </li>
+
+
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-instagram mr-2 icon-inline text-danger">
+                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                    </svg>Instagram</h6>
+                                {% if object.instagram %}
+                                    <div class="badge badge-success">Postado</div>
+                                {%  else %}
+                                    <div class="badge badge-danger">Não Postado</div>
+                                {% endif %}
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-facebook mr-2 icon-inline text-primary">
+                                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z">
+                                        </path>
+                                    </svg>Facebook</h6>
+                                {% if object.facebook %}
+                                <div class="badge badge-success">Postado</div>
+                                {%  else %}
+                                <div class="badge badge-danger">Não Postado</div>
+                                {% endif %}
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><img class="feather feather-globe mr-2 icon-inline"
+                                        src="{% static '/assets/img/social/whatsapp.png' %}" width="24" height="24"
+                                        alt="First slide">Whatsapp</h6>
+                                {% if object.whatsapp %}
+                                <div class="badge badge-success">Postado</div>
+                                {%  else %}
+                                <div class="badge badge-danger">Não Postado</div>
+                                {% endif %}
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><img class="feather feather-globe mr-2 icon-inline"
+                                        src="{% static '/assets/img/social/telegram.png' %}" width="24" height="24"
+                                        alt="First slide">Telegram</h6>
+                                    {% if object.telegram %}
+                                    <div class="badge badge-success">Postado</div>
+                                    {%  else %}
+                                    <div class="badge badge-danger">Não Postado</div>
+                                    {% endif %}
+                            </li>                            
+                        </ul>
+                    </div>
+                    {% if reports %}
+                        <div class="">
+                            <div class="card card-danger">
+                                <div class="card-header">
+                                    <h4>Reportagens</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p class="alert alert-danger"><b>Esse produto foi reportado por {{number_report}} pessoas</b></p></p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 class="mb-0">Título:</h6>
+                                </div>
+                                <div class="col-sm-8 text-dark">
+                                    <h4>{{ object.title}}</h4>
+                                </div>
+                                <div class="col-sm-2">
+                                    <img class="img-thumbnail" style="width: 70%; height: auto;"
+                                        src="/media/{{ object.store.logo }}" alt="First slide">
+                                </div>
+                            </div>
+                            <div class="row">
+                               <div class="col-sm-10">
+                                    {% if product.status == 'ACTIVE' %}
+                                        <div class="badge badge-success">Ativo</div>
+                                    {% elif product.status == 'PENDING' %}
+                                        <div style="background-color: rgb(109, 107, 107);" class="badge badge-secondary">Pendente</div>
+                                    {% elif product.status == 'CLOSED' %}
+                                        <div style="background-color: rgb(109, 107, 107);" class="badge badge-secondary">Encerrado</div>
+                                    {% endif %}
+            
+                                    {% if product.relevant %}
+                                        <div class="badge badge-danger">Destacado</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 style="width:80px;" class="mb-0">Descrição</h6>
+                                </div>
+                                <div style="color: rgb(109, 107, 107);" class="col-sm-10">
+                                    {{ object.description | safe}}
+                                </div>
+                            </div>
+
+                            <hr>
+                            {% if object.old_price %}
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 class="mb-0">De:</h6>
+                                </div>
+                                <div style="color: rgb(109, 107, 107);" class="col-sm-10">
+                                    <h5><del>R$ {{ object.old_price }}</del></h5>
+                                </div>
+                            </div>
+                            <hr>
+                            {% endif %}
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 class="mb-0">Por:</h6>
+                                </div>
+                                <div class="col-sm-10 text-danger">
+                                    <h4>R$ {{ object.price }}</h4>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 style="width:90px;" class="mb-0">Pagamento:</h6>
+                                </div>
+                                <div style="color: rgb(109, 107, 107);" class="col-sm-10">
+                                    {{ object.form_payment }}
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 class="mb-0">Frete:</h6>
+                                </div>
+                                <div style="color: rgb(109, 107, 107);" class="col-sm-10">
+                                    {{ object.freight }}
+                                </div>
+                            </div>
+                            <hr>
+
+                            {% if object.short_url %}
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 class="mb-0">Link Curto:</h6>
+                                </div>
+                                <div style="color: rgb(109, 107, 107);" class="col-sm-10">
+                                    {{ object.short_url }}
+                                </div>
+                            </div>
+                            <hr>
+                            {% endif %}
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 style="width:90px;" class="mb-0">Última Alteração:</h6>
+                                </div>
+                                <div  style="color: rgb(109, 107, 107);" class="col-sm-10">
+                                    {{ object.updated_at }}
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <h6 style="width:100px;" class="mb-0">Usuário Responsável:</h6>
+                                </div>
+                                <div style="color: rgb(109, 107, 107);" class="col-sm-10">
+                                    {{ object.user.username }}
+                                </div>
+                            </div>
+                            <hr>
+
+
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {% if not product.status == 'ACTIVE' %}
+                                        <a  class="btn btn-info" href="{% url 'editar_produto' product.id 'publicar' %}"><b>Editar</b></a>
+                                    {% else %}
+                                        <a  class="btn btn-info" href="{% url 'editar_produto' product.id 'atualizar' %}"><b>Editar</b></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if comments %}
+            <div class="card">
+                <div class="card-header">
+                <h4>Comentários</h4>
+                </div>
+                {% for comment in comments %}
+                    <div style="font-family: arial;" class="card-body">
+                        <ul class="list-unstyled list-unstyled-border list-unstyled-noborder">
+                            <li class="media">
+                                {% if comment.author.image %}
+                                    <img alt="image" class="mr-3 rounded-circle" width="70" src="/media/{{ comment.author.image }}">
+                                {% else %}
+                                    <img alt="image" class="mr-3 rounded-circle" width="70" src="{% static 'assets/img/avatar/avatar-3.png' %}">
+                                {% endif %}
+                                <div class="media-body">
+                                    <div class="media-right"><a href="{% url 'desativar_comentario' comment.id object.id %}"><button class="btn btn-danger">Desativar</button></a> </div>
+                                    <div> 
+                                        <span style="font-size: 19px; color:#00B38F;" > <b>{{ comment.author.username }}</b></span>
+                                        <span style="margin-left: 10px;"><i class="far fa-clock"></i> {{ comment.created }}</span>
+                                    </div>
+                                    <div style="color: #777; font-size: 19px; margin-top: 3px;" class="media-description">{{ comment.text }}</div>
+                                    <div style="margin-top: 10px;">
+                                        <span><i style="color: rgb(202, 197, 197);" class="fas fa-thumbs-up"></i> Curtir(15)</span>
+                                        <span onClick="exibeDiv('id_{{comment.id}}')" style="margin-left: 10px; cursor: pointer;" ><i style="color: rgb(202, 197, 197);" class="fas fa-share"></i> Responder</span>
+                                    </div>  
+                                </div>
+                            </li>  
+                            {% if comment.parent %}
+                                <li style="border-radius:10px; background-color: #F0F2F5; margin-left: 70px; padding: 10px;" class="media">
+                                    <img alt="image" class="mr-3 rounded-circle" width="70" src="{% static 'assets/img/Pechinchou.png' %}">
+                                    <div style="text-align:justify;" class="media-body">
+                                        <div> 
+                                            <b><span style="font-size: 19px; color:#c5283a;" >{{ comment.parent.author.username }}</span></b>
+                                            <span style="margin-left: 10px;"><i class="far fa-clock"></i> {{ comment.parent.created }}</span>
+                                        </div>
+                                        <div style="color: #777; font-size: 19px;" class="media-description text-muted">{{ comment.parent.text }}</div>
+                                    </div>
+                                </li>
+                            {% endif %}
+
+                            <form style='display: none; margin-left: 90px; padding: 10px;' id='id_{{comment.id}}' class="form-response" method="POST" action="{% url 'resposta_comentario' comment.id %}">
+                                {% csrf_token %}
+                                <div style="display: flex; align-items: center; justify-content: center;" class="form-group">
+                                    <input id="id_{{comment.id}}" class="form-control" type="text" name="text">
+                                    <button style="margin-left: 10px;" class="btn btn-primary" type="submit">Responder</button>
+                                </div>
+                            </form>
+                        </ul>
+                    </div>
+                {% endfor %}
+                    </div>
+            {% endif %}
+
+    </section>
+</div>
+{% endblock content %}
+
+{% block js_page %}
+
+<script>
+    function exibeDiv(id){
+        var div = document.getElementById(id);
+        div.style.display = "block";
+    }
+</script>
+<script src="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{% static 'node_modules/nicescroll/dist/jquery.nicescroll.min.js' %}"></script>
+
+{% endblock js_page %}

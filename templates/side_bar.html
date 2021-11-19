@@ -1,0 +1,44 @@
+{% load static %}
+<div class="main-sidebar">
+    <aside id="sidebar-wrapper">
+      <div class="sidebar-brand">
+        <a href="{% url 'dashboard' %}"> <img style="width: 20%; height: 80%; border-radius: 50%; margin-top: 20px; margin-bottom: 65px;" src="{% static 'assets/img/Pechinchou.png' %}" alt="Logo Pechinchou"></a>
+      </div>
+      <div class="sidebar-brand sidebar-brand-sm">
+        <a href="{% url 'dashboard' %}"> <img style="width: 50%; height: 50%; border-radius: 50%; margin-top: 20px; margin-bottom: 65px;" src="{% static 'assets/img/Pechinchou.png' %}" alt="Logo Pechinchou"></a>
+      </div>
+    
+      <ul class="sidebar-menu">
+          <li class="menu-header">Dashboard</li>
+          <li class="nav-item dropdown">
+            <a href="{% url 'dashboard' %}" class="nav-link "><i class="fas fa-home"></i><span>Tela Inicial</span></a>
+          </li>
+          <li class="menu-header">Gerenciamento</li>
+          <li class="nav-item dropdown active">
+            <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Anúncios</span></a>
+            <ul class="dropdown-menu" style="display: block !important;">
+              <li><a class="nav-link" href="{% url 'cadastrar_produto' %}">Cadastrar Anúncio</a></li>
+              <li><a class="nav-link" href="{% url 'listar_produto' option='pendentes' %}">Listar Anúncios</a></li>
+              <li><a class="nav-link" href="{% url 'pendente_produto'%}">Anúncios Não Enviados</a></li>
+              <li><a class="nav-link" href="{% url 'destaque_produto'%}">Anúncios em Destaque</a></li>
+              <li><a class="nav-link" href="{% url 'anuncios_comentados'%}">Anúncios Comentados</a></li>
+              <li><a class="nav-link" href="{% url 'anuncios_reportados'%}">Anúncios Reportados</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link has-dropdown"><i class="fas fa-store"></i> <span>Lojas</span></a>
+            <ul class="dropdown-menu">
+              <li><a class="nav-link" href="{% url 'lista_lojas' %}">Todas as Lojas</a></li>
+              <li><a class="nav-link" href="{% url 'cadastro_lojas' %}">Cadastrar Loja</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Funcionário</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'listagem_usuario' %}">Listagem de Funcionários</a></li>
+            </ul>
+          </li>
+    </aside>
+  </div>

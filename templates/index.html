@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+{% block content %}
+<div class="main-content" >
+    <section class="section">
+      <div class="section-header">
+        <h1>Dashboard</h1>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+          <div class="card card-statistic-1">
+            <div class="card-icon bg-primary">
+              <i class="far fa-user"></i>
+            </div>
+            <div class="card-wrap">
+              <div class="card-header">
+                <h4>Total de Usuários</h4>
+              </div>
+              <div class="card-body">
+                {{ qtd_users }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+          <div class="card card-statistic-1">
+            <div class="card-icon bg-danger">
+              <i class="far fa-newspaper"></i>
+            </div>
+            <div class="card-wrap">
+              <div class="card-header">
+                <h4>Postagens Ativas</h4>
+              </div>
+              <div class="card-body">
+                {{ qtd_products }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+          <div class="card card-statistic-1">
+            <div class="card-icon bg-warning">
+              <i class="far fa-file"></i>
+            </div>
+            <div class="card-wrap">
+              <div class="card-header">
+                <h4>Reportagem de Erros</h4>
+              </div>
+              <div class="card-body">
+                {{ products_reports  }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+          <div class="card card-statistic-1">
+            <div class="card-icon bg-success">
+              <i class="fas fa-circle"></i>
+            </div>
+            <div class="card-wrap">
+              <div class="card-header">
+                <h4>Usuários On-line</h4>
+              </div>
+              <div class="card-body">
+                47
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4>Últimas Postagens</h4>
+                {% if last_product %}
+                  <div class="card-header-action">
+                    <a href="{% url 'listar_produto' option='pendentes' %}" class="btn btn-primary">Veja Todos</a>
+                  </div>
+                {% else %}
+                  <div class="card-header-action">
+                    <a href="{% url 'cadastrar_produto' %}" class="btn btn-primary">Cadastrar Anúncio</a>
+                  </div>
+                {% endif %}
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                  {% if last_product %}
+                    <thead>
+                      <tr>
+                        <th>Imagem</th>
+                        <th>Descrição</th>
+                        <th>Responsável pela Publicação</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for product in last_product %}
+                      <tr>
+                          <td>
+                            {% if product.image %}
+                            <img src="/media/{{product.image }}" alt="avatar" width="45" class="mr-1">
+                            {% else %}
+                            <img src="https://w7.pngwing.com/pngs/998/203/png-transparent-black-and-white-no-to-camera-logo-video-on-demand-retail-website-simple-no-miscellaneous-television-text.png" width="45"  class="mr-1" alt="">
+                            {% endif %}
+                          </td>
+                          <td>
+                            <a style="color: rgb(31, 31, 31)" href="{% url 'detalhes_produto' product.id%}">{{ product.title }}</a>
+                          </td>
+                          
+                          <td>
+                            {% if product.user.image %}
+                              <img src="/media/{{product.user.image }}" alt="avatar" width="30" class="rounded mr-3"><strong>{{ product.user.username }} </strong>
+                            {% else %} 
+                              <img src="{% static 'assets/img/avatar/avatar-5.png'%}" alt="avatar" width="30" class="rounded mr-3"><strong>{{ product.user.username }} </strong> 
+                            {% endif %}
+                          </td>
+
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  {% else %}
+                    <div class="card-header">
+                      <h4 style="margin: auto;">Nenhuma Postagem Publicada</h4>
+                    </div>
+                  {% endif %}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4>Quantidade de Anúncio por Loja</h4>
+              {% if not all_stores %}
+                <div class="card-header-action">
+                  <a href="{% url 'cadastro_lojas' %}" class="btn btn-primary">Cadastrar Loja</a>
+                </div>
+              {% endif %}
+            </div>
+              <div class="card-body">
+                {% if numbers_stores %}
+                  {% for store in all_stores %}
+                    {% for n in numbers_stores%}
+                      {% if n.store == store.id %}
+                      <div class="mb-4">
+                            <div class="text-small float-right font-weight-bold text-muted">{{ n.dcount }}</div>
+                        <div class="font-weight-bold mb-1">{{store.name}}</div>
+                        <div class="progress" data-height="3">
+                              <div class="progress-bar" role="progressbar" data-width="{{ n.porcem }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      {% endif %}
+                    {% endfor %} 
+                  {% endfor %}
+                {% else %}
+                  <div class="card-header">
+                    <h4 style="margin: auto;">Nenhum Anúncio Feito</h4>
+                  </div>       
+                {% endif %}
+              </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+{% endblock content %}

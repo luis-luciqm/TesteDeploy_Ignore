@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"></link>
+
+{% endblock css %}
+
+{% block content %}
+<div class="main-content" >
+    <section class="section">
+        <div class="section-header">
+          <div class="section-header-back">
+            <a href="features-posts.html" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+          </div>
+          <h1>Criar Novo Anúncio</h1>
+          <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="#">Anúncios</a></div>
+            <div class="breadcrumb-item">Criar Novo Anúncio.</div>
+          </div>
+        </div>
+    </section>
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Escreva o novo Anúncio</h4>
+                </div>
+                <div class="card-body">
+                  <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                    
+                      {% if form.errors %}
+                      {% for field in form %}
+                      {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ field.name|title }} {{ error|escape }}</strong>
+                      </div>
+                      {% endfor %}
+                      {% endfor %}
+                      {% for error in form.non_field_errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                      {% endfor %}
+                      {% endif %}
+
+                      <div class="form-group row mb-4">
+                          <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nome do Produto</label>
+                          <div class="col-sm-12 col-md-7">
+                              <input type="text" id="title" name="title" value="{{ form.instance.title }}" class="form-control">
+                          </div>
+                      </div>
+
+                      <div class="form-group row mb-4">
+                          <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Link da Loja</label>
+                          <div class="col-sm-12 col-md-7">
+                              {{ form.long_url }}
+                          </div>
+                      </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Descrição</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.description }}
+                      </div>
+                    </div>
+                    
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Loja</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.store }}
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Imagem</label>
+                      <div class="col-sm-12 col-md-7">
+                        <div id="image-preview" class="image-preview">
+                          <label for="image-upload" id="image-label">Escolher Imagem</label>
+                          <input type="file" name="image" id="image-upload" value="{{ form.instance.image }}" />
+                        </div>
+                      </div>
+                    </div>
+                   
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Cupom</label>
+                      <div class="col-sm-12 col-md-7">
+                        <input type="text" class="form-control" value="{{ form.instance.coupon }}" name='coupon' >
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Preço</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.price }}
+                      </div>
+                    </div>
+
+
+                <!--     
+                    <div class="form-group row mb-4">
+
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Preço</label>
+                      <div class="col-sm-12 col-md-3">
+                        <input type="text" class="form-control inputtags">
+                      </div>
+
+                      <label class="col-form-label text-md-right col-12 col-md-2 col-lg-1">De</label>
+                      <div class="col-sm-12 col-md-3">
+                        <input type="text" class="form-control inputtags">
+                      </div>
+
+                    </div>
+                  -->
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pagamento</label>
+                      <div class="col-sm-12 col-md-7">
+                        {{ form.payments }}
+                      </div>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Categoria:</label>
+                      <div class="col-sm-12 col-md-7">
+                        <select class="form-control border-right-0 selectric" id="id_category"  name="category"
+                            value="{{request.POST.estados}}" data-placeholder="Escolha o(s) Estado(s)">
+                            <option value="">Escolha o segmento</option>
+                        {% for cat in categorys %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                </select>
+                      </div>
+                    </div>
+
+                  
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Categoria:</label>
+                      <div class="col-sm-12 col-md-7">
+                        <select class="form-control border-right-0 selectric" id="id_subcategory"  name="subcategory"
+                            value="{{request.POST.subcategory}}" data-placeholder="Escolha o(s) Estado(s)">
+                            <option value="">Escolha o segmento</option>
+                          
+                         </select>
+                      </div>
+                    </div>
+      
+                    
+                    
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Ativa</label>
+                      <label class="col-sm-12 col-md-7">
+                       <!--<input type="checkbox" name="active" value="{{ form.instance.active}}" class="custom-switch-input">--> 
+                       {{ form.active }}
+                        <span class="custom-switch-indicator"></span>
+                        <span class="custom-switch-description">Ativar/Desativar Anúncio</span>
+                      </label>
+                    </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                      <div class="col-sm-12 col-md-7">
+                        <button class="btn btn-primary">Criar Anúncio</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>    
+</div>
+    {% endblock content %}
+
+    {% block js_page %}
+     
+
+
+        <script>
+
+          $("#id_category").change(function () {
+              console.log("teste")
+              const objetctID = $(this).val();  
+              console.log("teste: " + objetctID )// get the selected subject ID from the HTML dropdown list 
+              $.ajax({                       // initialize an AJAX request
+                  type: "POST",
+                  url: '{% url "get_categoria_ajax" %}',
+                  data: {
+                      'category_id': objetctID,       // add the country id to the POST parameters
+                      'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                  },
+                  success: function (data) {   // `data` is from `get_topics_ajax` view function
+                      let html_data = '<option value="">---------</option>';
+                      data.forEach(function (data) {
+                          html_data += `<option value="${data.id}">${data.name}</option>`
+                      });
+                      $("#id_subcategory").html(html_data); // replace the contents of the topic input with the data that came from the server
+                  }
+              });
+    
+          });
+      </script>
+    {% endblock js_page %}

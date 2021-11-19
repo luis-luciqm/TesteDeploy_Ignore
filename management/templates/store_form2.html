@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"></link>
+
+{% endblock css %}
+{% block content %}
+
+<div class="main-content" >
+    <section class="section">
+        <div class="section-header">
+            <div class="section-header-back">
+                <a href="{% url 'dashboard'%}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Cadastre sua loja</h1>  
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Loja</a></div>
+                <div class="breadcrumb-item">Cadastrar Loja</div>
+            </div>
+    </section>
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="container">
+                        <div class="card-header">
+                            <h4>Cadastre sua loja</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="container">
+                                    <div class="form-group row mb-4">
+                                        <div class="col-sm-12 col-md-7">
+                                            {% csrf_token %}
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row mb-4">
+                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nome</label>
+                                        <div class="col-sm-12 col-md-7">
+                                            {{form.name}}
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-left: 18.5%;">
+                                        <div class="form-group row mb-4">
+                                            <div class="form-group row mb-3">
+                                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Url</label>
+                                                <div style="width: 300px;" class="col-sm-12 col-md-7">
+                                                    {{form.url}}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row mb-3">
+                                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Lugar</label>
+                                                <div style="width: 300px;" class="col-sm-12 col-md-7">
+                                                    {{form.style_link}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mb-4">
+                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">ID Parceiro</label>
+                                        <div class="col-sm-12 col-md-7">
+                                            {{form.id_partner}}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mb-4">
+                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Ativo</label>
+                                        <div class="col-sm-12 col-md-7">
+                                            {{form.active}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-4">
+                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Logo da Loja</label>
+                                        <div class="col-sm-12 col-md-7">
+                                            <div id="image-preview" class="image-preview"
+                                                {% if form.logo.value %}   
+                                                    style="background-image: url('/media/{{ form.logo.value }}'); width: 250px;height: 250px;
+                                                    background-size: cover;background-position: center center;"  
+                                                {% endif %} 
+                                                >
+                                                <label for="image-upload" id="image-label">Escolher Imagem Site</label>
+                                                <input type="file" name="logo" id="image-upload"  />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row mb-4">
+                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Banner da Loja</label>
+                                        <div class="col-sm-12 col-md-7">
+                                            <div id="image-preview-2" class="image-preview"
+                                                {% if form.banner.value %}   
+                                                    style="background-image: url('/media/{{ form.banner.value }}'); width: 250px;height: 250px;
+                                                    background-size: cover;background-position: center center;"  
+                                                {% endif %} 
+                                                >
+                                                <label for="image-upload" id="image-label-2">Escolher Imagem Banner</label>
+                                                <input type="file" name="banner" id="image-upload-2"  />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mb-4">
+                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Cor Primária</label>
+                                        <div class="col-sm-12 col-md-7">
+                                            {{form.primary_color}}
+                                        </div>
+                                    </div>
+
+                                    
+                                    
+                                    <div class="form-group row mb-4">
+                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                                        <div class="col-sm-12 col-md-7">
+                                            <button class="btn btn-primary">Cadastrar</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js_page %}
+<script src="{% static 'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{% static 'node_modules/jquery_upload_preview/assets/js/jquery.uploadPreview.min.js' %}"></script>
+<script src="{% static 'node_modules/nicescroll/dist/jquery.nicescroll.min.js' %}"></script>
+
+<script>
+  document.querySelector('#id_name').classList.add('form-control')
+  document.querySelector('#id_url').classList.add('form-control')
+  document.querySelector('#id_id_partner').classList.add('form-control')
+  document.querySelector('#id_style_link').classList.add('form-control')
+  document.querySelector('#id_primary_color').classList.add('form-control')
+  document.querySelector('#id_primary_color').type = 'color';
+</script>
+
+<script>
+    $.uploadPreview({
+          input_field: "#image-upload",   // Default: .image-upload
+          preview_box: "#image-preview",  // Default: .image-preview
+          label_field: "#image-label",    // Default: .image-label
+          label_default: "Choose File",   // Default: Choose File
+          label_selected: "Site",  // Default: Change File
+          no_label: false,                // Default: false
+          success_callback: null,          // Default: null
+  
+        });
+
+        $.uploadPreview({
+          input_field: "#image-upload-2",   // Default: .image-upload
+          preview_box: "#image-preview-2",  // Default: .image-preview
+          label_field: "#image-label-2",    // Default: .image-label
+          label_default: "Choose File",   // Default: Choose File
+          label_selected: "Site",  // Default: Change File
+          no_label: false,                // Default: false
+          success_callback: null,          // Default: null
+  
+        });    
+ </script>
+{% endblock js_page %}

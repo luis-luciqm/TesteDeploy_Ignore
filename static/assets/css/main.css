@@ -1,0 +1,65 @@
+
+/*Store Registration*/
+#id_name, #id_url, #id_logo {
+    width: 500px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+#id_url{
+    margin-left: 27px;
+}
+#id_logo{
+    margin-left: 15px;
+}
+.row-form-store{
+    margin-top: 5%;
+    margin-left: 20%;
+}
+
+/* List Store*/
+.table.table-striped.mb-0{
+    text-align: center;
+}
+#column-url-store{
+    padding: 5px;
+    width: 500px;
+}
+#column-logo-store{
+    padding: 5px;
+}
+#column-name-store{
+    padding: 5px;
+    width: 200px !important;
+}
+.column-action-store{
+    width: 50px;
+    padding: 5px;
+    text-align: left;
+}
+
+#id_username{
+    margin-left: 1em !important;
+    width: 50%;
+}
+
+#id_phone{
+    margin-left: 2.7em !important;
+    width: 50%;
+}
+
+#id_email{
+    margin-left: 2.9em !important;
+    width: 50%;
+}
+
+#home{
+    text-decoration: none !important;
+}
+
+#instagram{
+    background-color: #b7b7b8 !important;
+}
+
+#telegram{
+    background-color: #0662eb !important;
+}
